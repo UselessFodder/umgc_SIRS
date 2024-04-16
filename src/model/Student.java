@@ -3,13 +3,19 @@ package model;
 //Class
 public class Student {
 	//Attributes
-	private static int studentID;
-	private static String studentUsername;
+	private int studentID;
+	private String studentUsername;
 	private String studentPassword = new String();
 	private String studentFirstName = new String();
 	private String studentLastName = new String();
 	private String studentAddress = new String();
 	private String studentPhone = new String();
+	
+	//constructor
+	public Student (int studentID, String studentUsername) {
+		this.studentID = studentID;
+		this.studentUsername = studentUsername;
+	}
 	
 	//Get and set statements
 	//For studentID

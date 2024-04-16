@@ -11,6 +11,14 @@ public class Assignment {
 	private int neededGrade;
 	private int actualGrade;
 	
+	//constructor
+	public Assignment(String assignmentName, int neededGrade, int actualGrade) {
+		this.assignmentName = assignmentName;
+		this.neededGrade = neededGrade;
+		this.actualGrade = actualGrade;
+		this.weightedScore = (actualGrade/1000) * 100;
+	}
+	
 	//Getters and setters
 	
 	//For assignment name
