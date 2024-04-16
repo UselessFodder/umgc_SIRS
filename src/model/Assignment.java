@@ -12,7 +12,7 @@ public class Assignment {
 	private int actualGrade;
 	
 	//constructor
-	public Assignment(String assignmentName, int neededGrade, int actualGrade) {
+	public Assignment(String assignmentName, int actualGrade, int neededGrade) {
 		this.assignmentName = assignmentName;
 		this.neededGrade = neededGrade;
 		this.actualGrade = actualGrade;
