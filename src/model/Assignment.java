@@ -18,6 +18,12 @@ public class Assignment {
 		this.actualGrade = actualGrade;
 		this.weightedScore = (actualGrade/1000) * 100;
 	}
+	//constructor to calculate weighted score
+	public weightedGrade(String assignmentName, int neededGrade) {
+		this.assignmentName = assignmentName;
+		this.neededGrade = neededGrade;
+		this.actualGrade = -1;
+	}
 	
 	//Getters and setters
 	
