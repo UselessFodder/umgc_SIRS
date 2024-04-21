@@ -67,7 +67,10 @@ public class Course {
 		
 		//loop over all arraylist values
 		for (Assignment assignment :assignments) {
-			totalGrade = totalGrade + assignment.getActualGrade();
+			//do not add if assignment does not have an actual grade defined
+			if(assignment.getActualGrade() >= 0) {
+				totalGrade = totalGrade + assignment.getActualGrade();
+			}
 		}//end for loop
 		
 		//return average grade
@@ -86,7 +89,10 @@ public class Course {
 		
 		//loop over all arraylist values
 		for (Assignment assignment :assignments) {
-			totalGrade = totalGrade + assignment.getNeededGrade();
+			//do not add if assignment does not have an actual grade defined
+			if(assignment.getActualGrade() >= 0) {
+				totalGrade = totalGrade + assignment.getNeededGrade();
+			}
 		}//end for loop
 		
 		//return average grade
@@ -102,26 +108,33 @@ public class Course {
 	public double getAssignmentActualGradeAverage() {
 		//exit if there are no assignments yet added to course
 		if(assignments.size() == 0) {
-			return 0;
+			//-1 indicates no assignments to average
+			return -1;
 		}//end if
 		
 		//used to hold grade values to be averaged
 		double totalGrade = 0;
+		int assignmentCount = 0;
 		
 		//loop over all arraylist values
 		for (Assignment assignment :assignments) {
-			totalGrade = totalGrade + assignment.getActualGrade();
+			//do not add if assignment does not have an actual grade defined
+			if(assignment.getActualGrade() >= 0) {
+				totalGrade = totalGrade + assignment.getActualGrade();
+				assignmentCount++;
+			}
 		}//end for loop
 		
 		//return average grade
-		return totalGrade/assignments.size();		
+		return totalGrade/assignmentCount;	
 	}
 	
 	//average all possible assignments grades within the course
 	public double getAssignmentNeededGradeAverage() {
 		//exit if there are no assignments yet added to course
 		if(assignments.size() == 0) {
-			return 0;
+			//-1 indicates no assignments to average
+			return -1;
 		}//end if
 		
 		//used to hold grade values to be averaged
