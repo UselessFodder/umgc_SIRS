@@ -20,7 +20,7 @@ public class Course {
 	public Course(String courseName) {
 		//if name is empty, throw error
 		if (courseName == null || courseName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Assignment name cannot be empty.");
+            throw new IllegalArgumentException("Course name cannot be empty.");
         } else {
     		this.courseName = courseName;
         }//end if-else
@@ -191,7 +191,12 @@ public class Course {
 	}//end getCourseName
 	
 	public void setCourseName(String cName) {
-		courseName = cName;
+		//if name is empty, throw error
+		if (cName == null || cName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Course name cannot be empty.");
+        } else {
+    		this.courseName = cName;
+        }//end if-else
 	}//end setCourseName
 	
 	//For course start date
