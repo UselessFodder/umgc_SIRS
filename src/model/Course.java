@@ -18,27 +18,33 @@ public class Course {
 	
 	//constructor
 	public Course(String courseName) {
-		this.courseName = courseName;
+		//if name is empty, throw error
+		if (courseName == null || courseName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Assignment name cannot be empty.");
+        } else {
+    		this.courseName = courseName;
+        }//end if-else
+
 		this.assignments = new ArrayList<>();
-	}
+	}//end constructor
 	
 	// Assignment List Control methods
 	
 	//add new assignment to course
 	public void addAssignment(Assignment assignment) {
 		assignments.add(assignment);
-	}
+	}//end addAssignment
 	
 	//remove assignment from course
 	public boolean removeAssignment(Assignment assignment) {
 		//returns boolean if assignment is found and removed
 		return assignments.remove(assignment);
-	}
+	}//end removeAssignment
 	
 	//get full arraylist of assignments
 	public List<Assignment> getAssignments(){
 		return assignments;
-	}
+	}//end getAssignments
 	
 	//retrieve an assignment by name
 	public Assignment getAssignmentByName(String name) {
@@ -53,7 +59,7 @@ public class Course {
 		//***TODO: consider throwing error here
 		
 		return null;
-	}
+	}//end getAssignmentByName
 	
 	//sum all assignments grades within the course
 	public int getAssignmentActualGradeTotal() {
@@ -75,7 +81,7 @@ public class Course {
 		
 		//return average grade
 		return totalGrade;		
-	}
+	}//end getAssignmentActualGradeTotal
 	
 	//sum all possible assignments grades within the course
 	public int getAssignmentNeededGradeTotal() {
@@ -92,17 +98,17 @@ public class Course {
 			//do not add if assignment does not have an actual grade defined
 			if(assignment.getActualGrade() >= 0) {
 				totalGrade = totalGrade + assignment.getNeededGrade();
-			}
+			}//end if
 		}//end for loop
 		
 		//return average grade
 		return totalGrade;	
-	}
+	}//end getAssignmentNeededGradeTotal
 	
 	//get current overall course grade in percentage
 	public double getAssignmentOverallGrade() {
 		return this.getAssignmentActualGradeTotal() / this.getAssignmentNeededGradeTotal();
-	}
+	}//end getAssignmentOverallGrade
 		
 	//average all assignments grades within the course
 	public double getAssignmentActualGradeAverage() {
@@ -122,12 +128,12 @@ public class Course {
 			if(assignment.getActualGrade() >= 0) {
 				totalGrade = totalGrade + assignment.getActualGrade();
 				assignmentCount++;
-			}
+			}//end if
 		}//end for loop
 		
 		//return average grade
 		return totalGrade/assignmentCount;	
-	}
+	}//end getAssignmentActualGradeAverage
 	
 	//average all possible assignments grades within the course
 	public double getAssignmentNeededGradeAverage() {
@@ -147,79 +153,72 @@ public class Course {
 		
 		//return average grade
 		return totalGrade/assignments.size();		
-	}
+	}//end getAssignmentNeededGradeAverage
 	
-	//get 
+	//----------- Get and set methods
 	
-	//Get and set methods
 	//For course ID
-	
 	public int getCourseID() {
 		return courseID;
-	}
+	}//end getCourseID
 	
 	public void setCourseID(int cID) {
 		courseID = cID;
-	}
+	}//end setCourseID
 	
 	//For course code
 	
 	public String getCourseCode() {
 		return courseCode;
-	}
+	}//end getCourseCode
 	
 	public void setCourseCode(String code) {
 		courseCode = code;
-	}
+	}//end setCourseCode
 	
 	//For courseNumber
-	
 	public int getCourseNumber() {
 		return courseNumber;
-	}
+	}//end getCourseNumber
 	
 	public void setCourseNumber(int cNumber) {
 		courseNumber = cNumber;
-	}
+	}//end setCourseNumber
 	
 	//For course name
-	
 	public String getCourseName() {
 		return courseName;
-	}
+	}//end getCourseName
 	
 	public void setCourseName(String cName) {
 		courseName = cName;
-	}
+	}//end setCourseName
 	
 	//For course start date
-	
 	public String getCourseStartDate() {
 		return courseStartDate;
-	}
+	}//end getCourseStartDate
 	
 	public void setCourseStartDate(String startDate) {
 		courseStartDate = startDate;
-	}
+	}//end setCourseStartDate
 	
 	//For course end date
-	
 	public String getCourseEndDate() {
 		return courseEndDate;
-	}
+	}//end getCourseEndDate
 	
 	public void setCourseEndDate(String endDate) {
 		courseEndDate = endDate;
-	}
+	}//end setCourseEndDate
 	
 	//For course grade
-	
 	public int getCourseGrade() {
 		return courseGrade;
-	}
+	}//end getCourseGrade
 	
 	public void setCourseGrade(int grade) {
 		courseGrade = grade;
-	}
+	}//end setCourseGrade
 
 }
