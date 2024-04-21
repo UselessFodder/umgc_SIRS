@@ -71,7 +71,6 @@ public class Controller implements ActionListener {
     		String assignmentInput = name + " " + gradeReceived + " / " + possibleGrade  + "\n";    		
     		assignmentText = assignmentText.concat(assignmentInput);
 		}//end for loop
-    	System.out.println("Text should be:" + assignmentText);
     	
     	//set new assignments output data as results text
     	JTextArea resultArea = ui.getResultArea();
