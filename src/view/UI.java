@@ -107,5 +107,56 @@ public class UI {
         return panel;
     }
     
+	//getters and setters
+	public JFrame getFrame() {
+		return frame;
+	}
+	public void setFrame(JFrame frame) {
+		this.frame = frame;
+	}
+	public JTextArea getResultArea() {
+		return resultArea;
+	}
+	public void setResultArea(JTextArea resultArea) {
+		this.resultArea = resultArea;
+	}
+    public JTextField getClassNameField() {
+		return classNameField;
+	}
+	public void setClassNameField(JTextField classNameField) {
+		this.classNameField = classNameField;
+	}
+    public JTextField getAssignmentNameField() {
+		return assignmentNameField;
+	}
+
+	public void setAssignmentNameField(JTextField assignmentNameField) {
+		this.assignmentNameField = assignmentNameField;
+	}
+
+	public JTextField getGradeReceivedField() {
+		return gradeReceivedField;
+	}
+
+	public void setGradeReceivedField(JTextField gradeReceivedField) {
+		this.gradeReceivedField = gradeReceivedField;
+	}
+
+	public JTextField getPossibleGradeField() {
+		return possibleGradeField;
+	}
+
+	public void setPossibleGradeField(JTextField possibleGradeField) {
+		this.possibleGradeField = possibleGradeField;
+	}
+
+	public JButton getAddAssignmentButton() {
+		return addAssignmentButton;
+	}
+
+	public void setAddAssignmentButton(JButton addAssignmentButton) {
+		this.addAssignmentButton = addAssignmentButton;
+	}
+    
     
 }

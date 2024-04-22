@@ -24,7 +24,7 @@ public class Controller implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
     	//check if event source was the addButton
-    	if ("addAssignment".equals(e.getActionCommand())) {
+    	if ("Add Assignment".equals(e.getActionCommand())) {
             //check if course object is initialized
         	if (course.getCourseName().equals("undefined")) {
         		//if so, create course object
