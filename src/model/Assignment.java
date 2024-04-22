@@ -51,6 +51,12 @@ public class Assignment {
 		
 		this.actualGrade = -1;
 	}//end constructor
+
+	//Function to calculate points that the user still has to get to reach the needed grade for an assignment
+	public int remainingPoints(int neededGrade, int actualGrade) {
+		remainingPoints = neededGrade - actualGrade
+			return remainingGrade;
+	}
 	
 	//--------	Getters and setters
 	//For assignment name
