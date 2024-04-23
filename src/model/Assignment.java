@@ -1,3 +1,10 @@
+/*File: Assignment.java
+* Creator: Team 5
+* Course: CMSC 495
+* Date: April 22, 2024
+* Purpose: Class creates a assignment object to be added to a course and displayed in the GUI
+*/
+
 package model;
 
 //Class
