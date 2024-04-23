@@ -1,3 +1,10 @@
+/*File: Controller.java
+* Creator: Team 5
+* Course: CMSC 495
+* Date: April 22, 2024
+* Purpose: Add functionality by connecting the GUI with the backend logic.
+*/
+
 package controller;
 
 import model.Assignment;
