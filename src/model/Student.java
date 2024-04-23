@@ -1,3 +1,10 @@
+/*File: Student.java
+* Creator: Team 5
+* Course: CMSC 495
+* Date: April 22, 2024
+* Purpose: Class craetes a Student object.  
+*/
+
 package model;
 
 //Class
