@@ -1,3 +1,10 @@
+/*File: Course.java
+* Creator: Team 5
+* Course: CMSC 495
+* Date: April 22, 2024
+* Purpose: Class craetes a course object.  
+*/
+
 package model;
 import java.util.ArrayList;
 import java.util.List;
