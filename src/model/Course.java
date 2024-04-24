@@ -35,7 +35,29 @@ public class Course {
 		this.assignments = new ArrayList<>();
 	}//end constructor
 	
-	// Assignment List Control methods
+	//---- Calculation methods
+	
+	//calculates what percentage is needed to achieve a passed in grade percentage
+	public double calculatePercentNeededForGrade(double gradeDesired) {
+		//get current total points achieved and current overall possible points
+		int currentPoints = getAssignmentActualGradeTotal();
+		int possiblePoints = getAssignmentNeededGradeTotal();
+		
+		//calculate goal points threshold for course (out of 1000)
+		double overallPointsNeeded = 1000 * (gradeDesired / 100);
+
+		//calculate how many points still need to be achieved to reach goal points
+		double pointsUntilGoal = overallPointsNeeded - currentPoints;
+
+		//find out how many points still can be achieved in course (out of 1000)
+		double remainingPossiblePoints = 1000 - possiblePoints;
+
+		//calculate what percentage of remaining possible points must be achieved to meet goal
+		return (pointsUntilGoal / remainingPossiblePoints) * 100;
+		
+	}//end calculatePercentNeededForGrade
+	
+	//----- Assignment List Control methods
 	
 	//add new assignment to course
 	public void addAssignment(Assignment assignment) {
