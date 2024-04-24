@@ -65,6 +65,28 @@ public class Assignment {
 			return remainingPoints;
 	}
 	
+	//updates weightedScore to new actualGrade
+	public int calculateWeightedScore() {
+		if (actualGrade > 0) {
+			this.weightedScore = (actualGrade/1000) * 100;
+			return this.weightedScore;
+		} else {
+			return 0;
+		}//end if-else
+	}//end calculateWeightedScore
+	
+	public int calculateGradeFromPercentage(double desiredPercentage) {
+		//condition desiredPercentage into whole numbers
+		if(desiredPercentage < 1) {
+			desiredPercentage = desiredPercentage * 100;
+		}//end if
+		
+		double exactGrade = neededGrade * (desiredPercentage / 100);
+		//round up to nearest whole number
+		return (int)Math.ceil(exactGrade);
+		
+	}//end calculateGradeFromPercentage
+	
 	//--------	Getters and setters
 	//For assignment name
 	
