@@ -61,8 +61,8 @@ public class Assignment {
 
 	//Function to calculate points that the user still has to get to reach the needed grade for an assignment
 	public int remainingPoints(int neededGrade, int actualGrade) {
-		remainingPoints = neededGrade - actualGrade
-			return remainingGrade;
+		int remainingPoints = neededGrade - actualGrade;
+			return remainingPoints;
 	}
 	
 	//--------	Getters and setters
