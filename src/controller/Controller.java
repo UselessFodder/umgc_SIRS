@@ -48,8 +48,8 @@ public class Controller implements ActionListener {
 				initializeCourse(className);
 			}
 
-			int gradeReceived = Integer.parseInt(gradeReceivedStr);
-			int possibleGrade = Integer.parseInt(possibleGradeStr);
+			double gradeReceived = Double.parseDouble(gradeReceivedStr);
+			double possibleGrade = Double.parseDouble(possibleGradeStr);
 
 			addAssignment(assignmentName, gradeReceived, possibleGrade);
 
@@ -69,8 +69,8 @@ public class Controller implements ActionListener {
 			return false;
 		}
 		try {
-			Integer.parseInt(gradeReceived);
-			Integer.parseInt(possibleGrade);
+			Double.parseDouble(gradeReceived);
+			Double.parseDouble(possibleGrade);
 		} catch (NumberFormatException e) {
 			return false;
 		}
@@ -80,7 +80,7 @@ public class Controller implements ActionListener {
 	private boolean isValidGrade(String grade) {
 		// Check if grade is numeric or one of the valid grades
 		try {
-			int gradeValue = Integer.parseInt(grade);
+			double gradeValue = Double.parseDouble(grade);
 			return gradeValue >= 0 && gradeValue <= 1000; // Assuming grade is between 0 and 1000
 		} catch (NumberFormatException e) {
 			String[] validGrades = {"A", "B", "C", "D", "F"};
@@ -105,7 +105,7 @@ public class Controller implements ActionListener {
 		ui.getClassNameField().setEditable(false);
 	}
 
-	public void addAssignment(String name, int gradeReceived, int possibleGrade) {
+	public void addAssignment(String name, double gradeReceived, double possibleGrade) {
 		// Create an assignment to add to course
 		Assignment assignment = new Assignment(name, gradeReceived, possibleGrade);
 
@@ -125,8 +125,8 @@ public class Controller implements ActionListener {
 		// Iterate through all assignments and output data to string
 		for (Assignment assignment : assignments) {
 			String name = assignment.getAssignmentName();
-			int gradeReceived = assignment.getActualGrade();
-			int possibleGrade = assignment.getNeededGrade();
+			double gradeReceived = assignment.getActualGrade();
+			double possibleGrade = assignment.getNeededGrade();
 			String assignmentInput = name + " " + gradeReceived + " / " + possibleGrade + "\n";
 			assignmentText.append(assignmentInput);
 		}
@@ -136,7 +136,7 @@ public class Controller implements ActionListener {
 		resultArea.setText(assignmentText.toString());
 	}
 
-	public void appendInputToScreen(String className, String assignmentName, int gradeReceived, int possibleGrade) {
+	public void appendInputToScreen(String className, String assignmentName, double gradeReceived, double possibleGrade) {
 		JTextArea resultArea = ui.getResultArea();
 		resultArea.append("Class Name: " + className + "\n");
 		resultArea.append("Assignment Name: " + assignmentName + "\n");
