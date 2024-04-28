@@ -1,3 +1,10 @@
+/*File: UI.java
+* Creator: Team 5
+* Course: CMSC 495
+* Date: April 22, 2024
+* Purpose: Create a GUI for user to add and calculate grade assignments totals and averages. 
+*/
+
 package view;
 
 import javax.swing.*;
@@ -75,8 +82,6 @@ public class UI {
         return panel;
     }
     
-
-
 	//getters and setters
 	public JFrame getFrame() {
 		return frame;
@@ -127,5 +132,5 @@ public class UI {
 	public void setAddAssignmentButton(JButton addAssignmentButton) {
 		this.addAssignmentButton = addAssignmentButton;
 	}
-	
+
 }
