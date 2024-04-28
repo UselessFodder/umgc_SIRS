@@ -8,77 +8,109 @@
 package view;
 
 import javax.swing.*;
-
 import controller.Controller;
-
 import java.awt.*;
 
 public class UI {
 
     private JFrame frame;
     private JTextField classNameField, assignmentNameField, gradeReceivedField, possibleGradeField;
-    private JTextArea resultArea;    
-	private JButton addAssignmentButton, calculateAverageGradeButton, saveDataButton, loadDataButton, importGradeButton;
+    private JTextArea resultArea;
+    private JButton addAssignmentButton, calculateAverageGradeButton, saveDataButton, loadDataButton, importGradeButton;
     private JComboBox<String> desiredOverallGradeComboBox;
+    private static final Color DARK_GREY = new Color(43, 43, 43);
+    private static final Color LIGHT_GREY = new Color(200, 200, 200);
+    private static final Color UMGC_YELLOW = new Color(255, 204, 0);
+    private static final Font MAIN_FONT = new Font("Helvetica", Font.PLAIN, 14);
 
     public UI(Controller controller) {
         initializeUI(controller);
-        //register this with controller
         controller.setUI(this);
     }
 
     private void initializeUI(Controller controller) {
-    	frame = new JFrame("UMGC Grade Calculator");
+        frame = new JFrame("UMGC Grade Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+        frame.setLayout(new GridBagLayout());
+        frame.getContentPane().setBackground(DARK_GREY);
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        classNameField = new JTextField();
-        classNameField.setPreferredSize(new Dimension(150,20));
-        assignmentNameField = new JTextField();
-        assignmentNameField.setPreferredSize(new Dimension(150,20));
-        gradeReceivedField = new JTextField();
-        gradeReceivedField.setPreferredSize(new Dimension(150,20));
-        possibleGradeField = new JTextField();
-        possibleGradeField.setPreferredSize(new Dimension(150,20));
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 10, 5, 10);
 
-        addAssignmentButton = new JButton("Add Assignment");
-        addAssignmentButton.setActionCommand("addAssignment");
-        addAssignmentButton.addActionListener(controller);
+        classNameField = createTextField();
+        assignmentNameField = createTextField();
+        gradeReceivedField = createTextField();
+        possibleGradeField = createTextField();
+
+        addAssignmentButton = createButton("Add Assignment", controller);
+        calculateAverageGradeButton = createButton("Calculate Average Grade", controller);
+        saveDataButton = createButton("Save Data", controller);
+        loadDataButton = createButton("Load Data", controller);
+        importGradeButton = createButton("Import Grade", controller);
 
         resultArea = new JTextArea(5, 20);
+        resultArea.setFont(MAIN_FONT);
         resultArea.setEditable(false);
-        resultArea.setBackground(frame.getBackground());
+        resultArea.setBackground(LIGHT_GREY);
+        resultArea.setForeground(Color.BLACK);
 
-        calculateAverageGradeButton = new JButton("Calculate Average Grade");
-        saveDataButton = new JButton("Save Data");
-        loadDataButton = new JButton("Load Data");
-        importGradeButton = new JButton("Import Grade");
+        desiredOverallGradeComboBox = new JComboBox<>(new String[]{"A", "B", "C", "D", "F"});
+        desiredOverallGradeComboBox.setFont(MAIN_FONT);
+        desiredOverallGradeComboBox.setBackground(LIGHT_GREY);
+        desiredOverallGradeComboBox.setForeground(Color.BLACK);
 
-        String[] grades = {"A", "B", "C", "D", "F"};
-        desiredOverallGradeComboBox = new JComboBox<>(grades);
-
-        frame.add(createInputPanel("Class Name:", classNameField));
-        frame.add(createInputPanel("Assignment Name:", assignmentNameField));
-        frame.add(createInputPanel("Grade Received:", gradeReceivedField));
-        frame.add(createInputPanel("Possible Grade:", possibleGradeField));
-        frame.add(addAssignmentButton);
-        frame.add(resultArea);
-        frame.add(calculateAverageGradeButton);
-        frame.add(saveDataButton);
-        frame.add(loadDataButton);
-        frame.add(importGradeButton);
-        frame.add(createInputPanel("Desired Overall Grade:", desiredOverallGradeComboBox));
+        frame.add(createInputPanel("Class Name:", classNameField), gbc);
+        frame.add(createInputPanel("Assignment Name:", assignmentNameField), gbc);
+        frame.add(createInputPanel("Grade Received:", gradeReceivedField), gbc);
+        frame.add(createInputPanel("Possible Grade:", possibleGradeField), gbc);
+        frame.add(addAssignmentButton, gbc);
+        frame.add(new JScrollPane(resultArea), gbc);
+        frame.add(calculateAverageGradeButton, gbc);
+        frame.add(saveDataButton, gbc);
+        frame.add(loadDataButton, gbc);
+        frame.add(importGradeButton, gbc);
+        frame.add(createInputPanel("Desired Overall Grade:", desiredOverallGradeComboBox), gbc);
 
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
+    private JButton createButton(String text, Controller controller) {
+        JButton button = new JButton(text);
+        button.setFont(MAIN_FONT);
+        button.setForeground(Color.BLACK);
+        button.setBackground(UMGC_YELLOW);
+        button.setActionCommand(text);
+        button.addActionListener(controller);
+        button.setOpaque(true);
+        button.setBorderPainted(false);
+        return button;
+    }
+
+    private JTextField createTextField() {
+        JTextField field = new JTextField();
+        field.setFont(MAIN_FONT);
+        field.setPreferredSize(new Dimension(200, 30));
+        field.setMaximumSize(field.getPreferredSize());
+        field.setBackground(LIGHT_GREY);
+        field.setForeground(Color.BLACK);
+        return field;
+    }
+
     private JPanel createInputPanel(String label, JComponent field) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panel.add(new JLabel(label));
-        panel.add(field);
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        JLabel jLabel = new JLabel(label);
+        jLabel.setForeground(Color.WHITE);
+        panel.add(jLabel, gbc);
+        panel.add(field, gbc);
+        panel.setBackground(DARK_GREY);
         return panel;
     }
     
@@ -132,5 +164,6 @@ public class UI {
 	public void setAddAssignmentButton(JButton addAssignmentButton) {
 		this.addAssignmentButton = addAssignmentButton;
 	}
-
+    
+    
 }
