@@ -143,6 +143,34 @@ public class Controller implements ActionListener {
 		resultArea.append("Grade Received: " + gradeReceived + "\n");
 		resultArea.append("Possible Grade: " + possibleGrade + "\n\n");
 	}
+	//Method to save courses
+	public void saveCourses() {
+		DataPersistenceManager.saveCourses(course, "courses.dat");
+		
+	}
+	
+	//Method to load courses
+	public void loadCourses() {
+		course = DataPersistenceManager.loadCourses("courses.dat");
+		if (course == null) {
+			course = new Course();
+			
+		}
+	}
+	//Method to save courses
+	public void saveCourses() {
+		DataPersistenceManager.saveCourses(course, "courses.dat");
+		
+	}
+	
+	//Method to load courses
+	public void loadCourses() {
+		course = DataPersistenceManager.loadCourses("courses.dat");
+		if (course == null) {
+			course = new Course();
+			
+		}
+	}
 
 	// Getters and setters
 	public UI getUI() {
