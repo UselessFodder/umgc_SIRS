@@ -16,6 +16,7 @@ import view.UI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
@@ -37,12 +38,29 @@ public class Controller implements ActionListener {
 			String possibleGradeStr = ui.getPossibleGradeField().getText();
 
 			// Validate input fields
-			if (!isValidInput(className, assignmentName, gradeReceivedStr, possibleGradeStr)) {
-				// Display error message
-				JOptionPane.showMessageDialog(ui.getFrame(), "Invalid input! Please check your entries.",
-											  "Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
+	        	if (!isFutureAssignment && gradeReceivedStr.isEmpty()) {
+	            		JOptionPane.showMessageDialog(ui.getFrame(), "Please enter an actual grade.", "Error", JOptionPane.ERROR_MESSAGE);
+	            		return;
+	        	}
+
+	        	try {
+	            	double gradeReceived = gradeReceivedStr.isEmpty() ? 0 : Double.parseDouble(gradeReceivedStr);
+	            	double possibleGrade = Double.parseDouble(possibleGradeStr);
+	            	double percentage = (gradeReceived / possibleGrade) * 100;
+	            	DecimalFormat df = new DecimalFormat("#.##");
+	            	String formattedOutput = assignmentName + " Grade: " + (gradeReceivedStr.isEmpty() ? "*" : gradeReceivedStr) +
+	                                     "/" + possibleGrade + " = " + (gradeReceivedStr.isEmpty() ? "*" : df.format(percentage) + "%");
+
+	            	ui.getResultArea().append(formattedOutput + "\n");
+
+	            	// Clear fields except for the class name after adding the assignment
+	            	ui.getAssignmentNameField().setText("");
+	            	ui.getGradeReceivedField().setText("");
+	            	ui.getPossibleGradeField().setText("");
+
+	        	} catch (NumberFormatException ex) {
+	            		JOptionPane.showMessageDialog(ui.getFrame(), "Please enter valid numbers for grades.", "Error", JOptionPane.ERROR_MESSAGE);
+	        	}
 
 			// If course object is not initialized, initialize it
 			if (course.getCourseName().equals("undefined")) {
