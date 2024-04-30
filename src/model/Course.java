@@ -6,11 +6,12 @@
 */
 
 package model;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 //Class
-public class Course {
+public class Course implements Serializable {
 	
 	//Attributes
 	private int courseID;

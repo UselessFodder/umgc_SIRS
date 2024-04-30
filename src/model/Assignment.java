@@ -7,9 +7,11 @@
 
 package model;
 
+import java.io.Serializable;
+
 //Class
 
-public class Assignment {
+public class Assignment implements Serializable{
 	
 	//Attributes
 	
