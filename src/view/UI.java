@@ -48,38 +48,6 @@ public class UI {
         possibleGradeField = createTextField();
 
         addAssignmentButton = createButton("Add Assignment", controller);
-        addAssignmentButton.addActionListener(e -> {
-            String className = classNameField.getText();
-            String assignmentName = assignmentNameField.getText();
-            String actualGrade = gradeReceivedField.getText();
-            String possibleGrade = possibleGradeField.getText();
-
-           
-            if (!futureAssignmentCheckbox.isSelected()) {
-                
-                if (actualGrade.isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Please enter an actual grade.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;  
-                }
-            }
-
-            String formattedOutput;
-            if (!actualGrade.isEmpty() && !possibleGrade.isEmpty()) {
-                double gradeValue = Double.parseDouble(actualGrade);
-                double possibleValue = Double.parseDouble(possibleGrade);
-                double percentage = (gradeValue / possibleValue) * 100;
-                DecimalFormat df = new DecimalFormat("#.##");
-                formattedOutput = assignmentName + " Grade: " + actualGrade + "/" + possibleGrade + " = " + df.format(percentage) + "%";
-            } else {
-                formattedOutput = assignmentName + " Grade: */" + possibleGrade;  
-            }
-
-            resultArea.append(formattedOutput + "\n");
-            classNameField.setText("");
-            assignmentNameField.setText("");
-            gradeReceivedField.setText("");
-            possibleGradeField.setText("");
-        });
         calculateAverageGradeButton = createButton("Calculate Average Grade", controller);
         saveDataButton = createButton("Save Data", controller);
         saveDataButton.addActionListener(e -> {
@@ -212,5 +180,9 @@ public class UI {
 		this.addAssignmentButton = addAssignmentButton;
 	}
     
+	public JCheckBox getFutureAssignmentCheckbox() {
+	    return futureAssignmentCheckbox;
+	}
+
     
 }
