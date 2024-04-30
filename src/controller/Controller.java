@@ -9,6 +9,7 @@ package controller;
 
 import model.Assignment;
 import model.Course;
+import model.DataPersistenceManager;
 import view.UI;
 
 
@@ -57,6 +58,14 @@ public class Controller implements ActionListener {
 			appendInputToScreen(className, assignmentName, gradeReceived, possibleGrade);
 
 			updateAssignmentDisplay();
+		}
+		if("Save Data".equals(e.getActionCommand())) {
+			//save the data
+			saveCourses();
+		}
+		if("Load Data".equals(e.getActionCommand())) {
+			//save the data
+			loadCourses();
 		}
 		// Handle other actions...
 	}
@@ -142,6 +151,24 @@ public class Controller implements ActionListener {
 		resultArea.append("Assignment Name: " + assignmentName + "\n");
 		resultArea.append("Grade Received: " + gradeReceived + "\n");
 		resultArea.append("Possible Grade: " + possibleGrade + "\n\n");
+	}
+	//Method to save courses
+	public void saveCourses() {
+		DataPersistenceManager.saveCourses(course, "courses.dat");
+		
+	}
+	
+	//Method to load courses
+	public void loadCourses() {
+		course = DataPersistenceManager.loadCourses("courses.dat");
+		if (course == null) {
+			//course = new Course();
+			throw new IllegalArgumentException("No saved SIRS file found");
+			
+		} else {
+			this.course = course;
+			updateAssignmentDisplay();
+		}
 	}
 
 	// Getters and setters
