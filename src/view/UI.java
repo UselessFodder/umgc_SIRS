@@ -113,13 +113,6 @@ public class UI {
         panel.setBackground(DARK_GREY);
         return panel;
     }
-	//Method to enable saving and loading courses
-    public CourseView (Controller controller) {
-    	this.controller = controller;
-    	saveDataButton.addActionListener(e -> controller.saveCourses());
-    	loadDataButton.addActionListener(e-> controller.loadCourses());
-    	
-    }
     
 	//getters and setters
 	public JFrame getFrame() {
