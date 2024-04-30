@@ -9,6 +9,7 @@ package view;
 
 import javax.swing.*;
 import controller.Controller;
+import java.text.DecimalFormat;
 import java.awt.*;
 
 public class UI {
@@ -17,6 +18,7 @@ public class UI {
     private JTextField classNameField, assignmentNameField, gradeReceivedField, possibleGradeField;
     private JTextArea resultArea;
     private JButton addAssignmentButton, calculateAverageGradeButton, saveDataButton, loadDataButton, importGradeButton;
+    private JCheckBox futureAssignmentCheckbox;
     private JComboBox<String> desiredOverallGradeComboBox;
     private static final Color DARK_GREY = new Color(43, 43, 43);
     private static final Color LIGHT_GREY = new Color(200, 200, 200);
@@ -33,6 +35,7 @@ public class UI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridBagLayout());
         frame.getContentPane().setBackground(DARK_GREY);
+        frame.setResizable(false);
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -45,10 +48,53 @@ public class UI {
         possibleGradeField = createTextField();
 
         addAssignmentButton = createButton("Add Assignment", controller);
+        addAssignmentButton.addActionListener(e -> {
+            String className = classNameField.getText();
+            String assignmentName = assignmentNameField.getText();
+            String actualGrade = gradeReceivedField.getText();
+            String possibleGrade = possibleGradeField.getText();
+
+           
+            if (!futureAssignmentCheckbox.isSelected()) {
+                
+                if (actualGrade.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "Please enter an actual grade.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;  
+                }
+            }
+
+            String formattedOutput;
+            if (!actualGrade.isEmpty() && !possibleGrade.isEmpty()) {
+                double gradeValue = Double.parseDouble(actualGrade);
+                double possibleValue = Double.parseDouble(possibleGrade);
+                double percentage = (gradeValue / possibleValue) * 100;
+                DecimalFormat df = new DecimalFormat("#.##");
+                formattedOutput = assignmentName + " Grade: " + actualGrade + "/" + possibleGrade + " = " + df.format(percentage) + "%";
+            } else {
+                formattedOutput = assignmentName + " Grade: */" + possibleGrade;  
+            }
+
+            resultArea.append(formattedOutput + "\n");
+            classNameField.setText("");
+            assignmentNameField.setText("");
+            gradeReceivedField.setText("");
+            possibleGradeField.setText("");
+        });
         calculateAverageGradeButton = createButton("Calculate Average Grade", controller);
         saveDataButton = createButton("Save Data", controller);
+        saveDataButton.addActionListener(e -> {
+        	JOptionPane.showMessageDialog(frame, "Data saved successfully.", "Save Confirmation", JOptionPane.INFORMATION_MESSAGE);
+        });
         loadDataButton = createButton("Load Data", controller);
         importGradeButton = createButton("Import Grade", controller);
+        importGradeButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(frame, "Import Grade functionality is not available in the prototype.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        });
+        futureAssignmentCheckbox = new JCheckBox("Include Future Assignments");
+        futureAssignmentCheckbox.setFont(MAIN_FONT);
+        futureAssignmentCheckbox.setBackground(DARK_GREY);
+        futureAssignmentCheckbox.setForeground(Color.WHITE);
+        futureAssignmentCheckbox.setSelected(false); 
 
         resultArea = new JTextArea(5, 20);
         resultArea.setFont(MAIN_FONT);
@@ -65,6 +111,7 @@ public class UI {
         frame.add(createInputPanel("Assignment Name:", assignmentNameField), gbc);
         frame.add(createInputPanel("Grade Received:", gradeReceivedField), gbc);
         frame.add(createInputPanel("Possible Grade:", possibleGradeField), gbc);
+        frame.add(futureAssignmentCheckbox, gbc); 
         frame.add(addAssignmentButton, gbc);
         frame.add(new JScrollPane(resultArea), gbc);
         frame.add(calculateAverageGradeButton, gbc);
