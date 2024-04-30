@@ -8,6 +8,7 @@
 package controller;
 
 import model.Assignment;
+
 import model.Course;
 import view.UI;
 
@@ -15,6 +16,7 @@ import view.UI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
@@ -28,37 +30,37 @@ public class Controller implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if ("Add Assignment".equals(e.getActionCommand())) {
-			// Get assignment information from fields
-			String className = ui.getClassNameField().getText();
-			String assignmentName = ui.getAssignmentNameField().getText();
-			String gradeReceivedStr = ui.getGradeReceivedField().getText();
-			String possibleGradeStr = ui.getPossibleGradeField().getText();
+	    if ("Add Assignment".equals(e.getActionCommand())) {
+	        String className = ui.getClassNameField().getText();
+	        String assignmentName = ui.getAssignmentNameField().getText();
+	        String gradeReceivedStr = ui.getGradeReceivedField().getText();
+	        String possibleGradeStr = ui.getPossibleGradeField().getText();
+	        boolean isFutureAssignment = ui.getFutureAssignmentCheckbox().isSelected();
 
-			// Validate input fields
-			if (!isValidInput(className, assignmentName, gradeReceivedStr, possibleGradeStr)) {
-				// Display error message
-				JOptionPane.showMessageDialog(ui.getFrame(), "Invalid input! Please check your entries.",
-											  "Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
+	        if (!isFutureAssignment && gradeReceivedStr.isEmpty()) {
+	            JOptionPane.showMessageDialog(ui.getFrame(), "Please enter an actual grade.", "Error", JOptionPane.ERROR_MESSAGE);
+	            return;
+	        }
 
-			// If course object is not initialized, initialize it
-			if (course.getCourseName().equals("undefined")) {
-				initializeCourse(className);
-			}
+	        try {
+	            double gradeReceived = gradeReceivedStr.isEmpty() ? 0 : Double.parseDouble(gradeReceivedStr);
+	            double possibleGrade = Double.parseDouble(possibleGradeStr);
+	            double percentage = (gradeReceived / possibleGrade) * 100;
+	            DecimalFormat df = new DecimalFormat("#.##");
+	            String formattedOutput = assignmentName + " Grade: " + (gradeReceivedStr.isEmpty() ? "*" : gradeReceivedStr) +
+	                                     "/" + possibleGrade + " = " + (gradeReceivedStr.isEmpty() ? "*" : df.format(percentage) + "%");
 
-			double gradeReceived = Double.parseDouble(gradeReceivedStr);
-			double possibleGrade = Double.parseDouble(possibleGradeStr);
+	            ui.getResultArea().append(formattedOutput + "\n");
 
-			addAssignment(assignmentName, gradeReceived, possibleGrade);
+	            // Clear fields except for the class name after adding the assignment
+	            ui.getAssignmentNameField().setText("");
+	            ui.getGradeReceivedField().setText("");
+	            ui.getPossibleGradeField().setText("");
 
-			// Append inputs to the input screen
-			appendInputToScreen(className, assignmentName, gradeReceived, possibleGrade);
-
-			updateAssignmentDisplay();
-		}
-		// Handle other actions...
+	        } catch (NumberFormatException ex) {
+	            JOptionPane.showMessageDialog(ui.getFrame(), "Please enter valid numbers for grades.", "Error", JOptionPane.ERROR_MESSAGE);
+	        }
+	    }
 	}
 
 	private boolean isValidInput(String className, String assignmentName, String gradeReceived, String possibleGrade) {
