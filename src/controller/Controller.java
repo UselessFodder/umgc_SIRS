@@ -38,7 +38,7 @@ public class Controller implements ActionListener {
 			String possibleGradeStr = ui.getPossibleGradeField().getText();
 
 			// Validate input fields
-	        	if (!isFutureAssignment && gradeReceivedStr.isEmpty()) {
+	        	if (!ui.getFutureAssignmentCheckbox().isSelected() && gradeReceivedStr.isEmpty()) {
 	            		JOptionPane.showMessageDialog(ui.getFrame(), "Please enter an actual grade.", "Error", JOptionPane.ERROR_MESSAGE);
 	            		return;
 	        	}
