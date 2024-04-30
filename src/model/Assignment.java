@@ -14,12 +14,12 @@ public class Assignment {
 	//Attributes
 	
 	private String assignmentName = new String();
-	private int weightedScore;
-	private int neededGrade;
-	private int actualGrade;
+	private double weightedScore;
+	private double neededGrade;
+	private double actualGrade;
 	
 	//constructor
-	public Assignment(String assignmentName, int actualGrade, int neededGrade) {
+	public Assignment(String assignmentName, double actualGrade, double neededGrade) {
 		//if name is empty, throw error
 		if (assignmentName == null || assignmentName.trim().isEmpty()) {
             throw new IllegalArgumentException("Assignment name cannot be empty.");
@@ -40,7 +40,7 @@ public class Assignment {
 	}//end constructor
 	
 	//constructor to calculate weighted score
-	public Assignment(String assignmentName, int neededGrade) {
+	public Assignment(String assignmentName, double neededGrade) {
 		//if name is empty, throw error
 		if (assignmentName == null || assignmentName.trim().isEmpty()) {
             throw new IllegalArgumentException("Assignment name cannot be empty.");
@@ -60,10 +60,32 @@ public class Assignment {
 	}//end constructor
 
 	//Function to calculate points that the user still has to get to reach the needed grade for an assignment
-	public int remainingPoints(int neededGrade, int actualGrade) {
-		int remainingPoints = neededGrade - actualGrade;
+	public double remainingPoints(double neededGrade, double actualGrade) {
+		double remainingPoints = neededGrade - actualGrade;
 			return remainingPoints;
 	}
+	
+	//updates weightedScore to new actualGrade
+	public double calculateWeightedScore() {
+		if (actualGrade > 0) {
+			this.weightedScore = (actualGrade/1000) * 100;
+			return this.weightedScore;
+		} else {
+			return 0;
+		}//end if-else
+	}//end calculateWeightedScore
+	
+	public double calculateGradeFromPercentage(double desiredPercentage) {
+		//condition desiredPercentage into whole numbers
+		if(desiredPercentage < 1) {
+			desiredPercentage = desiredPercentage * 100;
+		}//end if
+		
+		double exactGrade = neededGrade * (desiredPercentage / 100);
+		//round up to nearest whole number
+		return exactGrade;
+		
+	}//end calculateGradeFromPercentage
 	
 	//--------	Getters and setters
 	//For assignment name
@@ -82,20 +104,20 @@ public class Assignment {
 	}//end setAssignmentName
 	
 	//For weighted score
-	public int getWeightedScore() {
+	public double getWeightedScore() {
 		return weightedScore;
 	}//end getWeightedSCore
 	
-	public void setWeightedScore(int wScore) {
+	public void setWeightedScore(double wScore) {
 		weightedScore = wScore;
 	}//end setWeightedScore
 	
 	//For needed grade
-	public int getNeededGrade() {
+	public double getNeededGrade() {
 		return neededGrade;
 	}//end getNeededGrade
 	
-	public void setNeededGrade(int needGrade) {
+	public void setNeededGrade(double needGrade) {
 		//check if value is above 0
 		if(needGrade > 0) {
 			neededGrade = needGrade;
@@ -106,11 +128,11 @@ public class Assignment {
 	}//end setNeededGrade
 	
 	//For actual grade
-	public int getActualGrade() {
+	public double getActualGrade() {
 		return actualGrade;
 	}//end getActuakGrade
 	
-	public void setActualGrade(int actGrade) {
+	public void setActualGrade(double actGrade) {
 		actualGrade = actGrade;
 	}//end setActualGrade
 }
