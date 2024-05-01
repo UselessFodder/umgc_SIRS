@@ -72,10 +72,9 @@ public class Controller implements ActionListener {
 
 			addAssignment(assignmentName, gradeReceived, possibleGrade);
 
-			// Append inputs to the input screen
-			appendInputToScreen(className, assignmentName, gradeReceived, possibleGrade);
-
-			updateAssignmentDisplay();
+			// Append inputs to the input screen *** UNNEEDED DUE TO ADDITION OF LINES 46-61 ABOVE
+			//appendInputToScreen(className, assignmentName, gradeReceived, possibleGrade);
+			//updateAssignmentDisplay();
 		}
 		if("Save Data".equals(e.getActionCommand())) {
 			//save the data
