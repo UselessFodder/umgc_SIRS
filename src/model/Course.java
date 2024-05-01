@@ -6,11 +6,12 @@
 */
 
 package model;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 //Class
-public class Course {
+public class Course implements Serializable {
 	
 	//Attributes
 	private int courseID;
@@ -19,7 +20,7 @@ public class Course {
 	private String courseName = new String();
 	private String courseStartDate = new String();
 	private String courseEndDate = new String();
-	private int courseGrade;
+	private double courseGrade;
 	//list to hold all assignments related to course
 	private List<Assignment> assignments;
 	
@@ -35,7 +36,29 @@ public class Course {
 		this.assignments = new ArrayList<>();
 	}//end constructor
 	
-	// Assignment List Control methods
+	//---- Calculation methods
+	
+	//calculates what percentage is needed to achieve a passed in grade percentage
+	public double calculatePercentNeededForGrade(double gradeDesired) {
+		//get current total points achieved and current overall possible points
+		double currentPoints = getAssignmentActualGradeTotal();
+		double possiblePoints = getAssignmentNeededGradeTotal();
+		
+		//calculate goal points threshold for course (out of 1000)
+		double overallPointsNeeded = 1000 * (gradeDesired / 100);
+
+		//calculate how many points still need to be achieved to reach goal points
+		double pointsUntilGoal = overallPointsNeeded - currentPoints;
+
+		//find out how many points still can be achieved in course (out of 1000)
+		double remainingPossiblePoints = 1000 - possiblePoints;
+
+		//calculate what percentage of remaining possible points must be achieved to meet goal
+		return (pointsUntilGoal / remainingPossiblePoints) * 100;
+		
+	}//end calculatePercentNeededForGrade
+	
+	//----- Assignment List Control methods
 	
 	//add new assignment to course
 	public void addAssignment(Assignment assignment) {
@@ -69,14 +92,14 @@ public class Course {
 	}//end getAssignmentByName
 	
 	//sum all assignments grades within the course
-	public int getAssignmentActualGradeTotal() {
+	public double getAssignmentActualGradeTotal() {
 		//exit if there are no assignments yet added to course
 		if(assignments.size() == 0) {
 			return 0;
 		}//end if
 		
 		//used to hold grade values to be averaged
-		int totalGrade = 0;
+		double totalGrade = 0;
 		
 		//loop over all arraylist values
 		for (Assignment assignment :assignments) {
@@ -91,14 +114,14 @@ public class Course {
 	}//end getAssignmentActualGradeTotal
 	
 	//sum all possible assignments grades within the course
-	public int getAssignmentNeededGradeTotal() {
+	public double getAssignmentNeededGradeTotal() {
 		//exit if there are no assignments yet added to course
 		if(assignments.size() == 0) {
 			return 0;
 		}//end if
 		
 		//used to hold grade values to be averaged
-		int totalGrade = 0;
+		double totalGrade = 0;
 		
 		//loop over all arraylist values
 		for (Assignment assignment :assignments) {
@@ -225,11 +248,11 @@ public class Course {
 	}//end setCourseEndDate
 	
 	//For course grade
-	public int getCourseGrade() {
+	public double getCourseGrade() {
 		return courseGrade;
 	}//end getCourseGrade
 	
-	public void setCourseGrade(int grade) {
+	public void setCourseGrade(double grade) {
 		courseGrade = grade;
 	}//end setCourseGrade
 

@@ -9,12 +9,14 @@ package controller;
 
 import model.Assignment;
 import model.Course;
+import model.DataPersistenceManager;
 import view.UI;
 
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
@@ -36,27 +38,51 @@ public class Controller implements ActionListener {
 			String possibleGradeStr = ui.getPossibleGradeField().getText();
 
 			// Validate input fields
-			if (!isValidInput(className, assignmentName, gradeReceivedStr, possibleGradeStr)) {
-				// Display error message
-				JOptionPane.showMessageDialog(ui.getFrame(), "Invalid input! Please check your entries.",
-											  "Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
+	        	if (!ui.getFutureAssignmentCheckbox().isSelected() && gradeReceivedStr.isEmpty()) {
+	            		JOptionPane.showMessageDialog(ui.getFrame(), "Please enter an actual grade.", "Error", JOptionPane.ERROR_MESSAGE);
+	            		return;
+	        	}
+
+	        	try {
+	            	double gradeReceived = gradeReceivedStr.isEmpty() ? 0 : Double.parseDouble(gradeReceivedStr);
+	            	double possibleGrade = Double.parseDouble(possibleGradeStr);
+	            	double percentage = (gradeReceived / possibleGrade) * 100;
+	            	DecimalFormat df = new DecimalFormat("#.##");
+	            	String formattedOutput = assignmentName + " Grade: " + (gradeReceivedStr.isEmpty() ? "*" : gradeReceivedStr) +
+	                                     "/" + possibleGrade + " = " + (gradeReceivedStr.isEmpty() ? "*" : df.format(percentage) + "%");
+
+	            	ui.getResultArea().append(formattedOutput + "\n");
+
+	            	// Clear fields except for the class name after adding the assignment
+	            	ui.getAssignmentNameField().setText("");
+	            	ui.getGradeReceivedField().setText("");
+	            	ui.getPossibleGradeField().setText("");
+
+	        	} catch (NumberFormatException ex) {
+	            		JOptionPane.showMessageDialog(ui.getFrame(), "Please enter valid numbers for grades.", "Error", JOptionPane.ERROR_MESSAGE);
+	        	}
 
 			// If course object is not initialized, initialize it
 			if (course.getCourseName().equals("undefined")) {
 				initializeCourse(className);
 			}
 
-			int gradeReceived = Integer.parseInt(gradeReceivedStr);
-			int possibleGrade = Integer.parseInt(possibleGradeStr);
+			double gradeReceived = Double.parseDouble(gradeReceivedStr);
+			double possibleGrade = Double.parseDouble(possibleGradeStr);
 
 			addAssignment(assignmentName, gradeReceived, possibleGrade);
 
-			// Append inputs to the input screen
-			appendInputToScreen(className, assignmentName, gradeReceived, possibleGrade);
-
-			updateAssignmentDisplay();
+			// Append inputs to the input screen *** UNNEEDED DUE TO ADDITION OF LINES 46-61 ABOVE
+			//appendInputToScreen(className, assignmentName, gradeReceived, possibleGrade);
+			//updateAssignmentDisplay();
+		}
+		if("Save Data".equals(e.getActionCommand())) {
+			//save the data
+			saveCourses();
+		}
+		if("Load Data".equals(e.getActionCommand())) {
+			//save the data
+			loadCourses();
 		}
 		// Handle other actions...
 	}
@@ -69,8 +95,8 @@ public class Controller implements ActionListener {
 			return false;
 		}
 		try {
-			Integer.parseInt(gradeReceived);
-			Integer.parseInt(possibleGrade);
+			Double.parseDouble(gradeReceived);
+			Double.parseDouble(possibleGrade);
 		} catch (NumberFormatException e) {
 			return false;
 		}
@@ -80,7 +106,7 @@ public class Controller implements ActionListener {
 	private boolean isValidGrade(String grade) {
 		// Check if grade is numeric or one of the valid grades
 		try {
-			int gradeValue = Integer.parseInt(grade);
+			double gradeValue = Double.parseDouble(grade);
 			return gradeValue >= 0 && gradeValue <= 1000; // Assuming grade is between 0 and 1000
 		} catch (NumberFormatException e) {
 			String[] validGrades = {"A", "B", "C", "D", "F"};
@@ -105,7 +131,7 @@ public class Controller implements ActionListener {
 		ui.getClassNameField().setEditable(false);
 	}
 
-	public void addAssignment(String name, int gradeReceived, int possibleGrade) {
+	public void addAssignment(String name, double gradeReceived, double possibleGrade) {
 		// Create an assignment to add to course
 		Assignment assignment = new Assignment(name, gradeReceived, possibleGrade);
 
@@ -125,8 +151,8 @@ public class Controller implements ActionListener {
 		// Iterate through all assignments and output data to string
 		for (Assignment assignment : assignments) {
 			String name = assignment.getAssignmentName();
-			int gradeReceived = assignment.getActualGrade();
-			int possibleGrade = assignment.getNeededGrade();
+			double gradeReceived = assignment.getActualGrade();
+			double possibleGrade = assignment.getNeededGrade();
 			String assignmentInput = name + " " + gradeReceived + " / " + possibleGrade + "\n";
 			assignmentText.append(assignmentInput);
 		}
@@ -136,12 +162,30 @@ public class Controller implements ActionListener {
 		resultArea.setText(assignmentText.toString());
 	}
 
-	public void appendInputToScreen(String className, String assignmentName, int gradeReceived, int possibleGrade) {
+	public void appendInputToScreen(String className, String assignmentName, double gradeReceived, double possibleGrade) {
 		JTextArea resultArea = ui.getResultArea();
 		resultArea.append("Class Name: " + className + "\n");
 		resultArea.append("Assignment Name: " + assignmentName + "\n");
 		resultArea.append("Grade Received: " + gradeReceived + "\n");
 		resultArea.append("Possible Grade: " + possibleGrade + "\n\n");
+	}
+	//Method to save courses
+	public void saveCourses() {
+		DataPersistenceManager.saveCourses(course, "courses.dat");
+		
+	}
+	
+	//Method to load courses
+	public void loadCourses() {
+		course = DataPersistenceManager.loadCourses("courses.dat");
+		if (course == null) {
+			//course = new Course();
+			throw new IllegalArgumentException("No saved SIRS file found");
+			
+		} else {
+			this.course = course;
+			updateAssignmentDisplay();
+		}
 	}
 
 	// Getters and setters
