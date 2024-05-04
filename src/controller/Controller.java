@@ -12,6 +12,10 @@ import model.Course;
 import model.DataPersistenceManager;
 import view.UI;
 
+//Imports for the JFileChooser
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -169,14 +173,29 @@ public class Controller implements ActionListener {
 		resultArea.append("Grade Received: " + gradeReceived + "\n");
 		resultArea.append("Possible Grade: " + possibleGrade + "\n\n");
 	}
+
+	//JFileChooser to choose assignments
+	public static void JFileChooser() {
+		JButton open = new JButton();
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setCurrentDirectory(new java.io.File(".")); //The dot stands in for the files directory.
+		fileChooser.setDialogueTitle("Welcome! Please select your file:");
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		if (fileChooser.showOpenDialog(open) == JFileChooser.APPROVE_OPTION) {
+			
+		}
+		System.out.println(fileChooser.getSelectedFile()); //Opens file
+	}
 	//Method to save courses
 	public void saveCourses() {
+		JFileChooser(); //Calling file chooser
 		DataPersistenceManager.saveCourses(course, "courses.dat");
 		
 	}
 	
 	//Method to load courses
 	public void loadCourses() {
+		JFileChooser(); //Calling file chooser
 		course = DataPersistenceManager.loadCourses("courses.dat");
 		if (course == null) {
 			//course = new Course();
