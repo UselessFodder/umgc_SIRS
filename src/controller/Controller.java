@@ -175,26 +175,28 @@ public class Controller implements ActionListener {
 	}
 
 	//JFileChooser to choose assignments
-	public static void JFileChooser() {
+	public String JFileChooser(fileOutput) {
 		JButton open = new JButton();
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new java.io.File(".")); //The dot stands in for the files directory.
 		fileChooser.setDialogueTitle("Welcome! Please select your file:");
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		if (fileChooser.showOpenDialog(open) == JFileChooser.APPROVE_OPTION) {
+			fileOutput= System.out.println(fileChooser.getSelectedFile().toString());//Opens file
+			return fileOutput;
 			
 		}
-		System.out.println(fileChooser.getSelectedFile()); //Opens file
 	}
+	
 	//Method to save courses
 	public void saveCourses() {
-		JFileChooser(); //Calling file chooser
+		JFileChooser(fileOutput); //Calling file chooser
 		DataPersistenceManager.saveCourses(course, "courses.dat");
 		
 	}
 	
 	//Method to load courses
-	public void loadCourses() {
+	public void loadCourses(fileOutput) {
 		JFileChooser(); //Calling file chooser
 		course = DataPersistenceManager.loadCourses("courses.dat");
 		if (course == null) {
