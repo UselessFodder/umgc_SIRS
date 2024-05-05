@@ -20,27 +20,6 @@ public class Assignment implements Serializable{
 	private double neededGrade;
 	private double actualGrade;
 	
-	//constructor
-	public Assignment(String assignmentName, double actualGrade, double neededGrade) {
-		//if name is empty, throw error
-		if (assignmentName == null || assignmentName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Assignment name cannot be empty.");
-        } else {
-    		this.assignmentName = assignmentName;
-        }//end if-else
-		
-		//check if value is invalid below 1
-		if(neededGrade < 1) {
-			//if invalid, throw error
-	        throw new IllegalArgumentException("Possible Grade Value Must Be Greater than 0");
-		} else {
-			this.neededGrade = neededGrade;
-		}//end if-else
-
-		this.actualGrade = actualGrade;
-		this.weightedScore = (actualGrade/1000) * 100;
-	}//end constructor
-	
 	//constructor to calculate weighted score
 	public Assignment(String assignmentName, double neededGrade) {
 		//if name is empty, throw error
@@ -59,6 +38,27 @@ public class Assignment implements Serializable{
 		}//end if-else
 		
 		this.actualGrade = -1;
+	}//end constructor
+	
+	//constructor with all values
+	public Assignment(String assignmentName, double actualGrade, double neededGrade) {
+		//if name is empty, throw error
+		if (assignmentName == null || assignmentName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Assignment name cannot be empty.");
+        } else {
+    		this.assignmentName = assignmentName;
+        }//end if-else
+		
+		//check if value is invalid below 1
+		if(neededGrade < 1) {
+			//if invalid, throw error
+	        throw new IllegalArgumentException("Possible Grade Value Must Be Greater than 0");
+		} else {
+			this.neededGrade = neededGrade;
+		}//end if-else
+
+		this.actualGrade = actualGrade;
+		this.weightedScore = (actualGrade/1000) * 100;
 	}//end constructor
 
 	//Function to calculate points that the user still has to get to reach the needed grade for an assignment
