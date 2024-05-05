@@ -62,7 +62,12 @@ public class Course implements Serializable {
 	
 	//add new assignment to course
 	public void addAssignment(Assignment assignment) {
-		assignments.add(assignment);
+		//do not add assignment if assignment with this name already exists
+		if(getAssignmentByName(assignment.getAssignmentName()) == null){
+			assignments.add(assignment);
+		} else {
+			throw new IllegalArgumentException("An Assignment with this name already exists!");
+		}
 	}//end addAssignment
 	
 	//remove assignment from course
@@ -96,9 +101,7 @@ public class Course implements Serializable {
 			}//end if
 		}//end for loop
 		
-		//if assignment is not in the list, return null
-		//***TODO: consider throwing error here
-		
+		//if assignment is not in the list, return null		
 		return null;
 	}//end getAssignmentByName
 	
