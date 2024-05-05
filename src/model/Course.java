@@ -91,6 +91,12 @@ public class Course implements Serializable {
 		return null;
 	}//end getAssignmentByName
 	
+	//returns latest assignment object added to course
+	public Assignment getAssignmentLastAdded() {
+		System.out.println("Retrieved last assignment Name: " + assignments.get(assignments.size() -1 ).getAssignmentName());
+		return assignments.get(assignments.size() - 1);
+	}//end getAssignmentLastAdded
+	
 	//sum all assignments grades within the course
 	public double getAssignmentActualGradeTotal() {
 		//exit if there are no assignments yet added to course
