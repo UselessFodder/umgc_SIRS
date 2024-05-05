@@ -28,7 +28,7 @@ import javax.swing.JTextArea;
 public class Controller implements ActionListener {
 	private UI ui;
 	private Course course;
-	private String desiredGrade;
+	private String desiredGrade = "A";
 
 	public Controller() {
 		this.course = new Course("undefined");
