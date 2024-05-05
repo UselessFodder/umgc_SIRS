@@ -30,62 +30,65 @@ public class Controller implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if ("Add Assignment".equals(e.getActionCommand())) {
-			// Get assignment information from fields
-			String className = ui.getClassNameField().getText();
-			String assignmentName = ui.getAssignmentNameField().getText();
-			String gradeReceivedStr = ui.getGradeReceivedField().getText();
-			String possibleGradeStr = ui.getPossibleGradeField().getText();
-
-			// Validate input fields
-	        	if (!ui.getFutureAssignmentCheckbox().isSelected() && gradeReceivedStr.isEmpty()) {
-	            		JOptionPane.showMessageDialog(ui.getFrame(), "Please enter an actual grade.", "Error", JOptionPane.ERROR_MESSAGE);
-	            		return;
-	        	}
-
-	        	try {
-	            	double gradeReceived = gradeReceivedStr.isEmpty() ? -1 : Double.parseDouble(gradeReceivedStr);
-	            	double possibleGrade = Double.parseDouble(possibleGradeStr);
-	            	double percentage = (gradeReceived / possibleGrade) * 100;
-	            	DecimalFormat df = new DecimalFormat("#.##");
-	            	String formattedOutput = assignmentName + " Grade: " + (gradeReceivedStr.isEmpty() ? "*" : gradeReceivedStr) +
-	                                     "/" + possibleGrade + " = " + (gradeReceivedStr.isEmpty() ? "*" : df.format(percentage) + "%");
-
-	            	ui.getResultArea().append(formattedOutput + "\n");
-
-	            	// Clear fields except for the class name after adding the assignment
-	            	ui.getAssignmentNameField().setText("");
-	            	ui.getGradeReceivedField().setText("");
-	            	ui.getPossibleGradeField().setText("");
-
-	        	} catch (NumberFormatException ex) {
-	            		JOptionPane.showMessageDialog(ui.getFrame(), "Please enter valid numbers for grades.", "Error", JOptionPane.ERROR_MESSAGE);
-	        	}
-
-			// If course object is not initialized, initialize it
-			if (course.getCourseName().equals("undefined")) {
-				initializeCourse(className);
+			try {
+			if ("Add Assignment".equals(e.getActionCommand())) {
+				// Get assignment information from fields
+				String className = ui.getClassNameField().getText();
+				String assignmentName = ui.getAssignmentNameField().getText();
+				String gradeReceivedStr = ui.getGradeReceivedField().getText();
+				String possibleGradeStr = ui.getPossibleGradeField().getText();
+	
+				// Validate input fields
+		        	if (!ui.getFutureAssignmentCheckbox().isSelected() && gradeReceivedStr.isEmpty()) {
+		            		JOptionPane.showMessageDialog(ui.getFrame(), "Please enter an actual grade.", "Error", JOptionPane.ERROR_MESSAGE);
+		            		return;
+		        	}
+	
+		        	try {
+		            	double gradeReceived = gradeReceivedStr.isEmpty() ? -1 : Double.parseDouble(gradeReceivedStr);
+		            	double possibleGrade = Double.parseDouble(possibleGradeStr);
+		            	double percentage = (gradeReceived / possibleGrade) * 100;
+		            	DecimalFormat df = new DecimalFormat("#.##");
+		            	String formattedOutput = assignmentName + " Grade: " + (gradeReceivedStr.isEmpty() ? "*" : gradeReceivedStr) +
+		                                     "/" + possibleGrade + " = " + (gradeReceivedStr.isEmpty() ? "*" : df.format(percentage) + "%");
+	
+		            	ui.getResultArea().append(formattedOutput + "\n");
+	
+		            	// Clear fields except for the class name after adding the assignment
+		            	ui.getAssignmentNameField().setText("");
+		            	ui.getGradeReceivedField().setText("");
+		            	ui.getPossibleGradeField().setText("");
+	
+		        	} catch (NumberFormatException ex) {
+		            		JOptionPane.showMessageDialog(ui.getFrame(), "Please enter valid numbers for grades.", "Error", JOptionPane.ERROR_MESSAGE);
+		        	}
+	
+				// If course object is not initialized, initialize it
+				if (course.getCourseName().equals("undefined")) {
+					initializeCourse(className);
+				}
+	
+				double gradeReceived = gradeReceivedStr.isEmpty() ? -1 : Double.parseDouble(gradeReceivedStr);
+				double possibleGrade = Double.parseDouble(possibleGradeStr);
+	
+				addAssignment(assignmentName, gradeReceived, possibleGrade);
+	
 			}
-
-			double gradeReceived = gradeReceivedStr.isEmpty() ? -1 : Double.parseDouble(gradeReceivedStr);
-			double possibleGrade = Double.parseDouble(possibleGradeStr);
-
-			addAssignment(assignmentName, gradeReceived, possibleGrade);
-
-		}
-		if("Save Data".equals(e.getActionCommand())) {
-			//save the data
-			saveCourses();
-		}
-		if("Load Data".equals(e.getActionCommand())) {
-			//save the data
-			loadCourses();
-		}
-		if("Delete Last Assignment".equals(e.getActionCommand())) {
-			//remove last assignment added to course
-			removeLastAssignment();
-		}
-		// Handle other actions...
+			if("Save Data".equals(e.getActionCommand())) {
+				//save the data
+				saveCourses();
+			}
+			if("Load Data".equals(e.getActionCommand())) {
+				//save the data
+				loadCourses();
+			}
+			if("Delete Last Assignment".equals(e.getActionCommand())) {
+				//remove last assignment added to course
+				removeLastAssignment();
+			}
+		} catch (Exception unhandledException) {
+			JOptionPane.showMessageDialog(ui.getFrame(), unhandledException.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}//end try-catch
 	}
 
 	private boolean isValidInput(String className, String assignmentName, String gradeReceived, String possibleGrade) {
