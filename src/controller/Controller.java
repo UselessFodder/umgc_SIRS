@@ -164,24 +164,35 @@ public class Controller implements ActionListener {
 	}
 
 	public void updateAssignmentDisplay() {
-		// Get all course assignments
-		List<Assignment> assignments = course.getAssignments();
-		// Hold text string outputs
-		StringBuilder assignmentText = new StringBuilder();
+	    if (course == null || course.getAssignments() == null) {
+	        ui.getResultArea().setText("No assignments to display."); // Handle case with no course or assignments
+	        return;
+	    }
 
-		// Iterate through all assignments and output data to string
-		for (Assignment assignment : assignments) {
-			String name = assignment.getAssignmentName();
-			double gradeReceived = assignment.getActualGrade();
-			double possibleGrade = assignment.getNeededGrade();
-			String assignmentInput = name + " " + (gradeReceived==-1 ? "*" : gradeReceived) + " / " + possibleGrade + "\n";
-			assignmentText.append(assignmentInput);
-		}
+	    StringBuilder assignmentText = new StringBuilder();
+	    DecimalFormat df = new DecimalFormat("#.##"); // Format numbers to two decimal places
 
-		// Set new assignments output data as results text
-		JTextArea resultArea = ui.getResultArea();
-		resultArea.setText(assignmentText.toString());
+	    for (Assignment assignment : course.getAssignments()) {
+	        String name = assignment.getAssignmentName();
+	        double gradeReceived = assignment.getActualGrade();
+	        double possibleGrade = assignment.getNeededGrade();
+
+	        String percentageDisplay = (gradeReceived == -1) ? "Future" : df.format((gradeReceived / possibleGrade) * 100) + "%";
+	        String assignmentInput = String.format("%s - %s / %s = %s\n",
+	            name,
+	            (gradeReceived == -1) ? "*" : df.format(gradeReceived),
+	            df.format(possibleGrade),
+	            percentageDisplay);
+
+	        assignmentText.append(assignmentInput);
+	    }
+
+	    // Access resultArea through the getter and set the text
+	    JTextArea resultArea = ui.getResultArea();
+	    resultArea.setText(assignmentText.toString());
 	}
+
+
 
 	public void appendInputToScreen(String className, String assignmentName, double gradeReceived, double possibleGrade) {
 		JTextArea resultArea = ui.getResultArea();
@@ -243,36 +254,56 @@ public class Controller implements ActionListener {
 	}//end removeLastAssignment()
 	
 	public void handleCalculateGrades() {
-	    double currentGradePercentage = course.getAssignmentOverallGrade() * 100;
-	    double desiredGradePercentage = convertGradeToPercentage(this.desiredGrade);
-	    double percentNeeded = course.calculatePercentNeededForGrade(desiredGradePercentage);
+	    if (course == null || course.getAssignments() == null) {
+	        JOptionPane.showMessageDialog(ui.getFrame(), "No course or assignments loaded.");
+	        return;
+	    }
 
-	    StringBuilder message = new StringBuilder("<html>You currently have <b>" + String.format("%.2f%%", currentGradePercentage) + "</b> in this course.<br>");
-	    message.append("You need to get <b>" + String.format("%.2f%%", percentNeeded) + "</b> on your remaining assignments ");
-	    message.append("in order to get your goal grade of <b>" + this.desiredGrade + "</b>.<br>Here is what scores you must get on the future assignments you have input:<br>");
+	    double currentGradePercentage = course.getAssignmentOverallGrade() * 100;  // Calculate the current overall grade percentage
+	    double desiredGradePercentage = convertGradeToPercentage(this.desiredGrade);  // Convert the desired grade from a letter to a percentage
 
-	    List<Assignment> futureAssignments = course.getAssignments().stream()
-	                                                .filter(a -> a.getActualGrade() == -1)
-	                                                .collect(Collectors.toList());
-	    if (futureAssignments.isEmpty()) {
-	        message.append("No future assignments found.<br>");
-	    } else {
-	        for (Assignment assignment : futureAssignments) {
-	            double neededGrade = calculateNeededGradeForAssignment(assignment, currentGradePercentage, desiredGradePercentage);
-	            message.append(assignment.getAssignmentName() + ": <b>" + String.format("%.2f%%", neededGrade) + "</b><br>");
+	    calculateNeededGradeForFutureAssignments(currentGradePercentage, desiredGradePercentage);  // Calculate required grades for future assignments
+	}
+
+
+	public void calculateNeededGradeForFutureAssignments(double currentGradePercentage, double desiredGradePercentage) {
+	    double totalPossiblePoints = 0;
+	    double totalAchievedPoints = 0;
+	    double futurePointsAvailable = 0;
+
+	    // Sum up points from all assignments
+	    for (Assignment assignment : course.getAssignments()) {
+	        double maxPoints = assignment.getNeededGrade();  // Assuming neededGrade represents the max points for this assignment
+	        totalPossiblePoints += maxPoints;
+	        if (assignment.getActualGrade() >= 0) {  // Check if the assignment has been graded
+	            totalAchievedPoints += assignment.getActualGrade();
+	        } else {  // Sum future assignment points
+	            futurePointsAvailable += maxPoints;
 	        }
 	    }
 
-	    message.append("</html>");
-	    JOptionPane.showMessageDialog(ui.getFrame(), message.toString(), "Grade Calculation", JOptionPane.INFORMATION_MESSAGE);
-	}
+	    double totalPointsNeeded = (totalPossiblePoints * desiredGradePercentage / 100);
+	    double pointsStillNeeded = totalPointsNeeded - totalAchievedPoints;
 
-	private double calculateNeededGradeForAssignment(Assignment assignment, double currentGradePercentage, double desiredGradePercentage) {
-	    double weight = assignment.getWeightedScore();  // Use weightedScore as the weight of the assignment towards the final grade
-	    double neededGrade = (desiredGradePercentage - currentGradePercentage) / weight; 
-	    return neededGrade > 0 ? neededGrade : 0;  // Ensure no negative grades are suggested
-	}
+	    // Calculate how much each future assignment needs to contribute
+	    StringBuilder results = new StringBuilder("<html>You currently have <b>" + String.format("%.2f%%", currentGradePercentage) + "</b> of the total grade.<br>");
+	    results.append("You need to score an additional <b>" + String.format("%.2f", pointsStillNeeded) + "</b> points to achieve a <b>" + desiredGrade + "</b> grade.<br>");
+	    results.append("Required scores for future assignments:<br>");
 
+	    for (Assignment assignment : course.getAssignments()) {
+	        if (assignment.getActualGrade() == -1) {  // Only consider future assignments
+	            double maxPoints = assignment.getNeededGrade();
+	            double requiredPoints = (maxPoints / futurePointsAvailable) * pointsStillNeeded;
+	            results.append(String.format("%s: <b>%.2f</b> out of %.2f points<br>", 
+	                assignment.getAssignmentName(), 
+	                requiredPoints, 
+	                maxPoints));
+	        }
+	    }
+
+	    results.append("</html>");
+	    JOptionPane.showMessageDialog(ui.getFrame(), results.toString(), "Grade Calculation Results", JOptionPane.INFORMATION_MESSAGE);
+	}
 
 	
 	public void setDesiredGrade(String grade) {
@@ -299,3 +330,4 @@ public class Controller implements ActionListener {
 		this.ui = ui;
 	}
 }
+
