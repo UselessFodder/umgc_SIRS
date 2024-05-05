@@ -175,30 +175,38 @@ public class Controller implements ActionListener {
 	}
 
 	//JFileChooser to choose assignments
-	public String JFileChooser(fileOutput) {
-		JButton open = new JButton();
+	public String JFileChooser(String chooserType) {
+		JButton action = new JButton();
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new java.io.File(".")); //The dot stands in for the files directory.
-		fileChooser.setDialogueTitle("Welcome! Please select your file:");
+		fileChooser.setDialogTitle("Welcome! Please select your file:");
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		if (fileChooser.showOpenDialog(open) == JFileChooser.APPROVE_OPTION) {
-			fileOutput= System.out.println(fileChooser.getSelectedFile().toString());//Opens file
-			return fileOutput;
-			
+		if(chooserType == "open") {
+			if (fileChooser.showOpenDialog(action) == JFileChooser.APPROVE_OPTION) {
+				String fileOutput= fileChooser.getSelectedFile().toString();//Opens file
+				return fileOutput;
+			}
 		}
+		if (chooserType == "save") {
+			if (fileChooser.showSaveDialog(action) == JFileChooser.APPROVE_OPTION) {
+				String fileOutput= fileChooser.getSelectedFile().toString()+".dat";//Opens file
+				return fileOutput;
+			}
+		}
+		return null;
 	}
 	
 	//Method to save courses
 	public void saveCourses() {
-		JFileChooser(fileOutput); //Calling file chooser
-		DataPersistenceManager.saveCourses(course, "courses.dat");
+		String fileOutput = JFileChooser("save"); //Calling file chooser
+		DataPersistenceManager.saveCourses(course, fileOutput);
 		
 	}
 	
 	//Method to load courses
-	public void loadCourses(fileOutput) {
-		JFileChooser(); //Calling file chooser
-		course = DataPersistenceManager.loadCourses("courses.dat");
+	public void loadCourses() {
+		String fileOutput = JFileChooser("open"); //Calling file chooser
+		course = DataPersistenceManager.loadCourses(fileOutput);
 		if (course == null) {
 			//course = new Course();
 			throw new IllegalArgumentException("No saved SIRS file found");
