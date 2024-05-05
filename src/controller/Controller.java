@@ -74,7 +74,12 @@ public class Controller implements ActionListener {
 					initializeCourse(className);
 				}
 	
-				double gradeReceived = Double.parseDouble(gradeReceivedStr);
+				double gradeReceived;
+				try{
+					gradeReceived = Double.parseDouble(gradeReceivedStr);
+				} catch (Exception noGradeException) {
+					gradeReceived = -1;
+				}//end try-catch
 				double possibleGrade = Double.parseDouble(possibleGradeStr);
 	
 				addAssignment(assignmentName, gradeReceived, possibleGrade);
