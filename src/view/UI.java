@@ -17,7 +17,7 @@ public class UI {
     private JFrame frame;
     private JTextField classNameField, assignmentNameField, gradeReceivedField, possibleGradeField;
     private JTextArea resultArea;
-    private JButton addAssignmentButton, calculateAverageGradeButton, saveDataButton, loadDataButton, importGradeButton;
+    private JButton addAssignmentButton, calculateAverageGradeButton, saveDataButton, loadDataButton, deleteLastButton;
     private JCheckBox futureAssignmentCheckbox;
     private JComboBox<String> desiredOverallGradeComboBox;
     private static final Color DARK_GREY = new Color(43, 43, 43);
@@ -58,10 +58,7 @@ public class UI {
         	JOptionPane.showMessageDialog(frame, "Data saved successfully.", "Save Confirmation", JOptionPane.INFORMATION_MESSAGE);
         });
         loadDataButton = createButton("Load Data", controller);
-        importGradeButton = createButton("Import Grade", controller);
-        importGradeButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, "Import Grade functionality is not available in the prototype.", "Info", JOptionPane.INFORMATION_MESSAGE);
-        });
+        deleteLastButton = createButton("Delete Last Assignment", controller);
         futureAssignmentCheckbox = new JCheckBox("Future Assignment");
         futureAssignmentCheckbox.setFont(MAIN_FONT);
         futureAssignmentCheckbox.setBackground(DARK_GREY);
@@ -94,7 +91,7 @@ public class UI {
         frame.add(calculateAverageGradeButton, gbc);
         frame.add(saveDataButton, gbc);
         frame.add(loadDataButton, gbc);
-        frame.add(importGradeButton, gbc);
+        frame.add(deleteLastButton, gbc);
         frame.add(createInputPanel("Desired Overall Grade:", desiredOverallGradeComboBox), gbc);
 
         frame.pack();
