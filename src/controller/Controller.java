@@ -81,7 +81,7 @@ public class Controller implements ActionListener {
 			//save the data
 			loadCourses();
 		}
-		if("Import Grade".equals(e.getActionCommand())) {
+		if("Delete Last Assignment".equals(e.getActionCommand())) {
 			//remove last assignment added to course
 			removeLastAssignment();
 		}
