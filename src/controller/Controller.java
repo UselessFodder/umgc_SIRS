@@ -96,8 +96,12 @@ public class Controller implements ActionListener {
 				//save the data
 				loadCourses();
 			}
-			if ("Calculate Needed Grades".equals(e.getActionCommand())) {
-	            handleCalculateGrades();
+			if ("Calculate Grade".equals(e.getActionCommand())) {
+	            if(course.getAssignments().size() >= 1) {
+	            	handleCalculateGrades();
+	            } else {
+	            	throw new ArrayIndexOutOfBoundsException ("There are no assignments added to this course.");
+	            }
 			}
 			if("Delete Last Assignment".equals(e.getActionCommand())) {
 				//remove last assignment added to course
@@ -241,6 +245,9 @@ public class Controller implements ActionListener {
 			
 		} else {
 			this.course = course;
+			// Prevent UI course name from being edited after initialization
+			ui.getClassNameField().setText(course.getCourseName());
+			ui.getClassNameField().setEditable(false);
 			updateAssignmentDisplay();
 		}
 	}
@@ -270,6 +277,8 @@ public class Controller implements ActionListener {
 	    double totalPossiblePoints = 0;
 	    double totalAchievedPoints = 0;
 	    double futurePointsAvailable = 0;
+	    
+	    double percentNeeded = course.calculatePercentNeededForGrade(desiredGradePercentage);
 
 	    // Sum up points from all assignments
 	    for (Assignment assignment : course.getAssignments()) {
@@ -286,19 +295,25 @@ public class Controller implements ActionListener {
 	    double pointsStillNeeded = totalPointsNeeded - totalAchievedPoints;
 
 	    // Calculate how much each future assignment needs to contribute
-	    StringBuilder results = new StringBuilder("<html>You currently have <b>" + String.format("%.2f%%", currentGradePercentage) + "</b> of the total grade.<br>");
-	    results.append("You need to score an additional <b>" + String.format("%.2f", pointsStillNeeded) + "</b> points to achieve a <b>" + desiredGrade + "</b> grade.<br>");
+	    StringBuilder results = new StringBuilder("<html>You currently have a grade of <b>" + String.format("%.2f%%", currentGradePercentage) + "</b> in this course.<br>");
+	    results.append("You need to get <b>" + String.format("%.2f%%", percentNeeded) + "</b> on your remaining assignments to achieve a " + desiredGrade + "</b> grade.<br>");
+	    results.append("You need to score an additional <b>" + String.format("%.2f", pointsStillNeeded) + "</b> points.<b><br><br>");
 	    results.append("Required scores for future assignments:<br>");
-
+	    
+	    //latch variable to determine if there are any future assignments
+	    boolean hasFutureAssignments = false;
 	    for (Assignment assignment : course.getAssignments()) {
 	        if (assignment.getActualGrade() == -1) {  // Only consider future assignments
-	            double maxPoints = assignment.getNeededGrade();
-	            double requiredPoints = (maxPoints / futurePointsAvailable) * pointsStillNeeded;
 	            results.append(String.format("%s: <b>%.2f</b> out of %.2f points<br>", 
 	                assignment.getAssignmentName(), 
-	                requiredPoints, 
-	                maxPoints));
+	                assignment.calculateGradeFromPercentage(percentNeeded), 
+	                assignment.getNeededGrade()));
+	            hasFutureAssignments = true;
 	        }
+	    }
+	    //if no assignments, add this information to the popip
+	    if (!hasFutureAssignments) {
+	    	results.append("There are no future assignments for this course.");
 	    }
 
 	    results.append("</html>");

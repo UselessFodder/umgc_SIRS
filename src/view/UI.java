@@ -48,11 +48,8 @@ public class UI {
         possibleGradeField = createTextField();
 
         addAssignmentButton = createButton("Add Assignment", controller);
-	    
-        calculateAverageGradeButton = createButton("Calculate Grade", controller);
-        calculateAverageGradeButton.addActionListener(e -> {
-            controller.handleCalculateGrades();  
-        });
+	    calculateAverageGradeButton = createButton("Calculate Grade", controller);
+
         saveDataButton = createButton("Save Data", controller);
         loadDataButton = createButton("Load Data", controller);
         deleteLastButton = createButton("Delete Last Assignment", controller);
