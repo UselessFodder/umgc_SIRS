@@ -54,9 +54,6 @@ public class UI {
             controller.handleCalculateGrades();  
         });
         saveDataButton = createButton("Save Data", controller);
-        saveDataButton.addActionListener(e -> {
-        	JOptionPane.showMessageDialog(frame, "Data saved successfully.", "Save Confirmation", JOptionPane.INFORMATION_MESSAGE);
-        });
         loadDataButton = createButton("Load Data", controller);
         deleteLastButton = createButton("Delete Last Assignment", controller);
         futureAssignmentCheckbox = new JCheckBox("Future Assignment");
