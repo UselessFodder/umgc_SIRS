@@ -81,6 +81,10 @@ public class Controller implements ActionListener {
 			//save the data
 			loadCourses();
 		}
+		if("Import Grade".equals(e.getActionCommand())) {
+			//remove last assignment added to course
+			removeLastAssignment();
+		}
 		// Handle other actions...
 	}
 
@@ -184,6 +188,14 @@ public class Controller implements ActionListener {
 			updateAssignmentDisplay();
 		}
 	}
+	
+	private void removeLastAssignment() {
+		boolean didRemove = course.removeAssignmentLastAdded();
+		if (!didRemove) {
+			JOptionPane.showMessageDialog(ui.getFrame(), "There is no assignment to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		updateAssignmentDisplay();
+	}//end removeLastAssignment()
 
 	// Getters and setters
 	public UI getUI() {

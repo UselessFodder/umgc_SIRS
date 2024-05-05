@@ -67,9 +67,20 @@ public class Course implements Serializable {
 	
 	//remove assignment from course
 	public boolean removeAssignment(Assignment assignment) {
+		System.out.println("Deleting assignment named: " + assignment.getAssignmentName());
 		//returns boolean if assignment is found and removed
 		return assignments.remove(assignment);
 	}//end removeAssignment
+	
+	//remove latest assignment added to course
+	public boolean removeAssignmentLastAdded() {
+		try {
+			Assignment assignmentToRemove = getAssignmentLastAdded();
+			return removeAssignment(assignmentToRemove);
+		} catch (Exception e) {
+			return false;
+		}//end try-catch
+	}//end removeAssignmentLastAdded
 	
 	//get full arraylist of assignments
 	public List<Assignment> getAssignments(){
@@ -93,8 +104,12 @@ public class Course implements Serializable {
 	
 	//returns latest assignment object added to course
 	public Assignment getAssignmentLastAdded() {
-		System.out.println("Retrieved last assignment Name: " + assignments.get(assignments.size() -1 ).getAssignmentName());
-		return assignments.get(assignments.size() - 1);
+		if(assignments.size() < 1) {
+			throw new IndexOutOfBoundsException("There are no assignments.");
+		} else {
+			System.out.println("Retrieved last assignment Name: " + assignments.get(assignments.size() -1 ).getAssignmentName());
+			return assignments.get(assignments.size() - 1);
+		}
 	}//end getAssignmentLastAdded
 	
 	//sum all assignments grades within the course
