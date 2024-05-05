@@ -44,7 +44,7 @@ public class Controller implements ActionListener {
 	        	}
 
 	        	try {
-	            	double gradeReceived = gradeReceivedStr.isEmpty() ? 0 : Double.parseDouble(gradeReceivedStr);
+	            	double gradeReceived = gradeReceivedStr.isEmpty() ? -1 : Double.parseDouble(gradeReceivedStr);
 	            	double possibleGrade = Double.parseDouble(possibleGradeStr);
 	            	double percentage = (gradeReceived / possibleGrade) * 100;
 	            	DecimalFormat df = new DecimalFormat("#.##");
@@ -67,14 +67,11 @@ public class Controller implements ActionListener {
 				initializeCourse(className);
 			}
 
-			double gradeReceived = Double.parseDouble(gradeReceivedStr);
+			double gradeReceived = gradeReceivedStr.isEmpty() ? -1 : Double.parseDouble(gradeReceivedStr);
 			double possibleGrade = Double.parseDouble(possibleGradeStr);
 
 			addAssignment(assignmentName, gradeReceived, possibleGrade);
 
-			// Append inputs to the input screen *** UNNEEDED DUE TO ADDITION OF LINES 46-61 ABOVE
-			//appendInputToScreen(className, assignmentName, gradeReceived, possibleGrade);
-			//updateAssignmentDisplay();
 		}
 		if("Save Data".equals(e.getActionCommand())) {
 			//save the data
@@ -107,7 +104,7 @@ public class Controller implements ActionListener {
 		// Check if grade is numeric or one of the valid grades
 		try {
 			double gradeValue = Double.parseDouble(grade);
-			return gradeValue >= 0 && gradeValue <= 1000; // Assuming grade is between 0 and 1000
+			return gradeValue >= -1 && gradeValue <= 1000; // Assuming grade is between 0 and 1000 w/-1 as unassigned value
 		} catch (NumberFormatException e) {
 			String[] validGrades = {"A", "B", "C", "D", "F"};
 			for (String validGrade : validGrades) {
@@ -153,7 +150,7 @@ public class Controller implements ActionListener {
 			String name = assignment.getAssignmentName();
 			double gradeReceived = assignment.getActualGrade();
 			double possibleGrade = assignment.getNeededGrade();
-			String assignmentInput = name + " " + gradeReceived + " / " + possibleGrade + "\n";
+			String assignmentInput = name + " " + (gradeReceived==-1 ? "*" : gradeReceived) + " / " + possibleGrade + "\n";
 			assignmentText.append(assignmentInput);
 		}
 
