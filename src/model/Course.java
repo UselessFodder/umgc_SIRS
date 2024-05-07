@@ -62,14 +62,30 @@ public class Course implements Serializable {
 	
 	//add new assignment to course
 	public void addAssignment(Assignment assignment) {
-		assignments.add(assignment);
+		//do not add assignment if assignment with this name already exists
+		if(getAssignmentByName(assignment.getAssignmentName()) == null){
+			assignments.add(assignment);
+		} else {
+			throw new IllegalArgumentException("An Assignment with this name already exists!");
+		}
 	}//end addAssignment
 	
 	//remove assignment from course
 	public boolean removeAssignment(Assignment assignment) {
+		System.out.println("Deleting assignment named: " + assignment.getAssignmentName());
 		//returns boolean if assignment is found and removed
 		return assignments.remove(assignment);
 	}//end removeAssignment
+	
+	//remove latest assignment added to course
+	public boolean removeAssignmentLastAdded() {
+		try {
+			Assignment assignmentToRemove = getAssignmentLastAdded();
+			return removeAssignment(assignmentToRemove);
+		} catch (Exception e) {
+			return false;
+		}//end try-catch
+	}//end removeAssignmentLastAdded
 	
 	//get full arraylist of assignments
 	public List<Assignment> getAssignments(){
@@ -85,11 +101,19 @@ public class Course implements Serializable {
 			}//end if
 		}//end for loop
 		
-		//if assignment is not in the list, return null
-		//***TODO: consider throwing error here
-		
+		//if assignment is not in the list, return null		
 		return null;
 	}//end getAssignmentByName
+	
+	//returns latest assignment object added to course
+	public Assignment getAssignmentLastAdded() {
+		if(assignments.size() < 1) {
+			throw new IndexOutOfBoundsException("There are no assignments.");
+		} else {
+			System.out.println("Retrieved last assignment Name: " + assignments.get(assignments.size() -1 ).getAssignmentName());
+			return assignments.get(assignments.size() - 1);
+		}
+	}//end getAssignmentLastAdded
 	
 	//sum all assignments grades within the course
 	public double getAssignmentActualGradeTotal() {

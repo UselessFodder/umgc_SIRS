@@ -17,7 +17,7 @@ public class UI {
     private JFrame frame;
     private JTextField classNameField, assignmentNameField, gradeReceivedField, possibleGradeField;
     private JTextArea resultArea;
-    private JButton addAssignmentButton, calculateAverageGradeButton, saveDataButton, loadDataButton, importGradeButton;
+    private JButton addAssignmentButton, calculateAverageGradeButton, saveDataButton, loadDataButton, deleteLastButton;
     private JCheckBox futureAssignmentCheckbox;
     private JComboBox<String> desiredOverallGradeComboBox;
     private static final Color DARK_GREY = new Color(43, 43, 43);
@@ -48,18 +48,12 @@ public class UI {
         possibleGradeField = createTextField();
 
         addAssignmentButton = createButton("Add Assignment", controller);
-	    
-        calculateAverageGradeButton = createButton("Calculate Average Grade", controller);
+	    calculateAverageGradeButton = createButton("Calculate Grade", controller);
+
         saveDataButton = createButton("Save Data", controller);
-        saveDataButton.addActionListener(e -> {
-        	JOptionPane.showMessageDialog(frame, "Data saved successfully.", "Save Confirmation", JOptionPane.INFORMATION_MESSAGE);
-        });
         loadDataButton = createButton("Load Data", controller);
-        importGradeButton = createButton("Import Grade", controller);
-        importGradeButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, "Import Grade functionality is not available in the prototype.", "Info", JOptionPane.INFORMATION_MESSAGE);
-        });
-        futureAssignmentCheckbox = new JCheckBox("Include Future Assignments");
+        deleteLastButton = createButton("Delete Last Assignment", controller);
+        futureAssignmentCheckbox = new JCheckBox("Future Assignment");
         futureAssignmentCheckbox.setFont(MAIN_FONT);
         futureAssignmentCheckbox.setBackground(DARK_GREY);
         futureAssignmentCheckbox.setForeground(Color.WHITE);
@@ -75,6 +69,11 @@ public class UI {
         desiredOverallGradeComboBox.setFont(MAIN_FONT);
         desiredOverallGradeComboBox.setBackground(LIGHT_GREY);
         desiredOverallGradeComboBox.setForeground(Color.BLACK);
+        desiredOverallGradeComboBox.addActionListener(e -> {
+            String selectedGrade = (String) desiredOverallGradeComboBox.getSelectedItem();
+            controller.setDesiredGrade(selectedGrade);
+        });
+        
 
         frame.add(createInputPanel("Class Name:", classNameField), gbc);
         frame.add(createInputPanel("Assignment Name:", assignmentNameField), gbc);
@@ -86,7 +85,7 @@ public class UI {
         frame.add(calculateAverageGradeButton, gbc);
         frame.add(saveDataButton, gbc);
         frame.add(loadDataButton, gbc);
-        frame.add(importGradeButton, gbc);
+        frame.add(deleteLastButton, gbc);
         frame.add(createInputPanel("Desired Overall Grade:", desiredOverallGradeComboBox), gbc);
 
         frame.pack();
